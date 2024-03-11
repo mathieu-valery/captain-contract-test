@@ -1,0 +1,61 @@
+.logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-container img {
+  width: 500px;
+}
+
+.text-container {
+  display: flex;
+  justify-content: center;
+}
+
+.text-container p {
+  width: 800px;
+  text-align: center;
+  font-size: larger;
+}
+
+.select-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.character-info-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.character-info {
+  min-width: 200px;
+}
+
+.weapon-info {
+  min-width: 200px;
+}
+
+.weapon-info-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+#results-info-container {
+  display: flex;
+  justify-content: center;
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+}

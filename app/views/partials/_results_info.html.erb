@@ -1,0 +1,23 @@
+<div class="result-info-partial">
+  <p><strong>Winner</strong> <%= @results[:winner].name %></p>
+  <table>
+    <tr>
+        <th>Name</th>
+        <th>Weapon</th>
+        <th>Hp Remaining</th>
+        <th>Hits received</th>
+    </tr>
+    <tr>
+        <td><%= @results[:char_1][:character].name %></td>
+        <td><%= @results[:char_1][:weapon]&.name %></td>
+        <td><%= @results[:char_1][:hp_remaining] %></td>
+        <td><%= @results[:char_1][:hits_received] %></td>
+    </tr>
+    <tr>
+        <td><%= @results[:char_2][:character].name %></td>
+        <td><%= @results[:char_2][:weapon]&.name %></td>
+        <td><%= @results[:char_2][:hp_remaining] %></td>
+        <td><%= @results[:char_2][:hits_received] %></td>
+    </tr>
+</table>
+</div>

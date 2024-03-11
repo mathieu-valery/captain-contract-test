@@ -1,0 +1,164 @@
+<div class='logo-container'>
+  <%= image_tag "logo.png" %>
+</div>
+
+<div class="text-container">
+  <p>Welcome to Super Smash Brothers ! Choose 2 fighters and click on the FIGHT button to see the results !
+    The first player gets the initiative to hit the second one. Then each fighter hits the other one alternately.
+    At each turn the attacker deals a number of damage equals to his attack plus his weapon's attack if there is one equiped.
+    When one player has 0 HP or less he is knocked out and the other one is declared winner !
+    </p>
+</div>
+
+<%= form_tag('/characters/fight', method: 'post') do %>
+  <div class='select-container'>
+    <div>
+      <label for="character-select">Character:</label>
+      <%= select_tag 'id_1', options_from_collection_for_select(@characters, 'id', 'name', 1), id: 'character-select' %>
+    </div>
+    <div>
+      <label for="weapon-select">Weapon:</label>
+      <%= select_tag 'weapon_1_id', options_from_collection_for_select(@weapons, 'id', 'name'), id: 'weapon-select', :include_blank => true %>
+    </div>
+
+    <h1>VS</h1>
+
+    <div>
+      <label for="character-select2">Character:</label>
+      <%= select_tag 'id_2', options_from_collection_for_select(@characters, 'id', 'name', 1), id: 'character-select2' %>
+    </div>
+    <div>
+      <label for="weapon-select2">Weapon:</label>
+      <%= select_tag 'weapon_2_id', options_from_collection_for_select(@weapons, 'id', 'name'), id: 'weapon-select2', :include_blank => true %>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="character-info-container">
+  <div id="character-info" class="character-info">
+  </div>
+
+  <div id="character-info2" class="character-info">
+  </div>
+</div>
+
+
+<div class="weapon-info-container">
+  <div id="weapon-info" class="weapon-info">
+  </div>
+
+  <div id="weapon-info2" class="weapon-info">
+  </div>
+</div>
+
+<div class="submit-button-container">
+  <button type="button", id='fight-button' >FIGHT !</button>
+</div>
+
+<div id="results-info-container">
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const characterSelect = document.getElementById('character-select');
+    const characterSelect2 = document.getElementById('character-select2');
+    const characterInfo = document.getElementById('character-info');
+    const characterInfo2 = document.getElementById('character-info2');
+    const weaponSelect1 = document.getElementById('weapon-select');
+    const weaponSelect2 = document.getElementById('weapon-select2');
+    const weaponInfo1 = document.getElementById('weapon-info');
+    const weaponInfo2 = document.getElementById('weapon-info2');
+
+    const submitButton = document.getElementById('fight-button');
+    const resultsInfo = document.getElementById('results-info-container');
+
+    const fillCharacterInfo = (selectElement, characterInfo) => {
+      const characterId = selectElement.value;
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/characters_info/' + characterId, true);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            characterInfo.innerHTML = xhr.responseText;
+          } else {
+            console.log('Error fetching character information');
+          }
+        }
+      };
+      xhr.send();
+    };
+
+    const fillWeaponInfo = (selectElement, weaponInfo) => {
+      const weaponId = selectElement.value;
+
+      if (!weaponId) {
+        weaponInfo.innerHTML = ""
+        return
+      }
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/weapons_info/' + weaponId, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            weaponInfo.innerHTML = xhr.responseText;
+          } else {
+            console.log('Error fetching character information');
+          }
+        }
+      };
+      xhr.send();
+    };
+
+    const fight = () => {
+      const characterId1 = characterSelect.value;
+      const characterId2 = characterSelect2.value;
+      const weaponId1 = weaponSelect1.value;
+      const weaponId2 = weaponSelect2.value;
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.open('POST', '/characters/fight_results', true);
+      const params = JSON.stringify(
+        {
+          character_1_id: characterId1,
+          character_2_id: characterId2,
+          weapon_1_id: weaponId1,
+          weapon_2_id: weaponId2
+        }
+      );
+      xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resultsInfo.innerHTML = xhr.responseText;
+          } else {
+            console.log('Error fetching character information');
+          }
+        }
+      };
+      xhr.send(params);
+    };
+
+    characterSelect.addEventListener('change', function(event) {
+      fillCharacterInfo(event.target, characterInfo);
+    });
+
+    characterSelect2.addEventListener('change', function(event) {
+      fillCharacterInfo(event.target, characterInfo2);
+    });
+
+    weaponSelect1.addEventListener('change', function(event) {
+      fillWeaponInfo(event.target, weaponInfo1);
+    });
+
+    weaponSelect2.addEventListener('change', function(event) {
+      fillWeaponInfo(event.target, weaponInfo2);
+    });
+
+    submitButton.addEventListener('click', fight);
+    fillCharacterInfo(characterSelect, characterInfo);
+    fillCharacterInfo(characterSelect2, characterInfo2);
+  });
+</script>
