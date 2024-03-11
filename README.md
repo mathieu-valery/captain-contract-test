@@ -1,3 +1,16 @@
+# Setup :
+git clone the project
+
+`bundle install`
+
+`rails db:migrate`
+
+`rails db:seed`
+
+`rails s`
+
+# Instructions :
+
 Ce repo contient le squelette d'une application à compléter dans le cadre du processus de recrutement des développeurs.
 
 Plus d'infos à propos du poste de développeur chez Captain Contrat sur [notre page jobs](https://www.welcometothejungle.com/fr/companies/captain-contrat/jobs)
